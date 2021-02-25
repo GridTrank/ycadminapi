@@ -19,12 +19,12 @@ app.all('*', function(req, res, next) {
 // 中间件，处理请求中公用的方法
 // 针对rep或者res做一些操作
 app.use('/',(req,res,next)=>{
-    
     next()
 })
 app.use('/role', require('./routers/role'));
 app.use('/menu', require('./routers/menu'));
 app.use('/product', require('./routers/product'));
+app.use('/order', require('./routers/order'));
 
 app.get("/login",(req,res)=>{
     // 获取请求路径，并返回对象格式

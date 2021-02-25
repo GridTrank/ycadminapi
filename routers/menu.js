@@ -1,7 +1,5 @@
-
 const pool = require('../pool.js')
 const router  = require("./index");
-
 
 
 router.get('/getMenu',(req,res)=>{
@@ -18,10 +16,16 @@ router.get('/getMenu',(req,res)=>{
             case 3:
                 key='is_kefu'
                 break;
+            default :
+                res.send({
+                    code:100003,
+                    message:'没有权限'
+                })
+                return
         }
     }else{
         res.send({
-            code:403,
+            code:100003,
             message:'没有权限'
         })
         return

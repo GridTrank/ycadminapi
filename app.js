@@ -25,6 +25,7 @@ app.use('/role', require('./routers/role'));
 app.use('/menu', require('./routers/menu'));
 app.use('/product', require('./routers/product'));
 app.use('/order', require('./routers/order'));
+app.use('/user', require('./routers/user'));
 
 app.get("/login",(req,res)=>{
     // 获取请求路径，并返回对象格式

@@ -5,7 +5,6 @@ const app =express();
 
 
 app.use(express.static('public'))
-app.use(express.static('uploads'))
 
 app.all('*', function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -26,6 +25,8 @@ app.use('/menu', require('./routers/menu'));
 app.use('/product', require('./routers/product'));
 app.use('/order', require('./routers/order'));
 app.use('/user', require('./routers/user'));
+app.use('/upload', require('./routers/upload'));
+app.use('/store', require('./routers/store'));
 
 app.get("/login",(req,res)=>{
     // 获取请求路径，并返回对象格式

@@ -11,10 +11,10 @@ router.get('/getMenu',(req,res)=>{
                 key='is_super_root'
                 break;
             case 2:
-                key='is_store_manage'
+                key='is_shop'
                 break;
             case 3:
-                key='is_kefu'
+                key='is_store'
                 break;
             default :
                 res.send({
@@ -30,7 +30,7 @@ router.get('/getMenu',(req,res)=>{
         })
         return
     }
-    var sql=`select * from sys_admin_menu where ${key} =1`
+    var sql=`select * from sys_admin_menu where ${key} =1 `
     pool.query(sql,(request,response)=>{
         let result={
             code:200,

@@ -1,6 +1,6 @@
 
-const pool = require('../pool.js')
-const router  = require("./index");
+const pool = require('../../pool.js')
+const router  = require("../index");
 
 
 router.get('/getRole',(req,res)=>{

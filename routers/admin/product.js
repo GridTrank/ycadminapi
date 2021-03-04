@@ -1,4 +1,4 @@
-const pool = require('../pool.js')
+const pool = require('../../pool.js')
 const express=require('express')
 const bodyParser=require('body-parser')
 const router = express.Router();

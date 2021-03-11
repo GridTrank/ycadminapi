@@ -3,14 +3,20 @@ const jwt = require("jsonwebtoken");
 const app =express();
 app.use(express.static('public'))
 
+let allowORigin=[
+    "http://47.112.113.38",
+    "http://localhost:8080",
+]
 app.all('*', function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST'); 
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization'); 
-    res.setHeader("Content-Type", "application/json;charset=utf-8");
+    if (allowORigin.indexOf(req.headers.origin) >= 0){
+        res.header("Access-Control-Allow-Origin", req.headers.origin);
+        res.header('Access-Control-Allow-Methods', 'GET, POST'); 
+        res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization'); 
+        res.header("content-Type", "application/json;charset=utf-8");
+        res.header("Access-control-Allow-Credentials","true");
+    }
     next();
 })
-
 // 针对rep或者res做一些操作
 app.use('/',(req,res,next)=>{
     next()

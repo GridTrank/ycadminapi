@@ -110,7 +110,7 @@ router.post('/productBanner',upload.array('imgSrc',5),(req,res)=>{
     req.files.forEach((file,index)=>{
         var extname = path.extname(req.files[0].originalname);  
         proObj.img_src= new Date()*(index+1)+extname
-        proObj.url='http://127.0.0.1:3000/uploads/'+ new Date()*(index+1)+extname
+        proObj.url='http://47.112.113.38:3000/uploads/'+ new Date()*(index+1)+extname
         fs.rename(file.path,file.destination+'/'+new Date()*(index+1)+extname,function(err){   
             if(err){
                 res.send("重命名错误");
@@ -131,7 +131,7 @@ router.post('/detailImg',upload.array('imgSrc',6),(req,res)=>{
     req.files.forEach((file,index)=>{
         var extname = path.extname(req.files[0].originalname);  
         proObj.img_src= new Date()*(index+1)+extname
-        proObj.url='http://127.0.0.1:3000/uploads/'+ new Date()*(index+1)+extname
+        proObj.url='http://47.112.113.38:3000/uploads/'+ new Date()*(index+1)+extname
         fs.rename(file.path,file.destination+'/'+new Date()*(index+1)+extname,function(err){   
             if(err){
                 res.send("重命名错误");
@@ -215,13 +215,13 @@ router.post('/detail',(req,res)=>{
         if(data.banners){
             data.banners=data.banners.split(',')
             data.banners.forEach((el,i,arr)=>{
-                arr[i]='http://127.0.0.1:3000/uploads/'+ el
+                arr[i]='http://47.112.113.38:3000/uploads/'+ el
             })
         }
         if(data.detail_imgs){
             data.detail_imgs=data.detail_imgs.split(',')
             data.detail_imgs.forEach((el,i,arr)=>{
-                arr[i]='http://127.0.0.1:3000/uploads/'+ el
+                arr[i]='http://47.112.113.38:3000/uploads/'+ el
             })
         }
 

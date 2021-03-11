@@ -11,7 +11,6 @@ app.all('*', function(req, res, next) {
     next();
 })
 
-// 中间件，处理请求中公用的方法
 // 针对rep或者res做一些操作
 app.use('/',(req,res,next)=>{
     next()
@@ -26,8 +25,6 @@ app.use('/user', require('./routers/admin/user'));
 app.use('/upload', require('./routers/admin/upload'));
 app.use('/store', require('./routers/admin/store'));
 
-// 小程序api
-app.use('/mpuser', require('./routers/xiaochengxu/mpuser'));
 
 app.listen(3000,()=>{
     console.log('服务器开启')

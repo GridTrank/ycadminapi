@@ -22,7 +22,7 @@ router.post('/getList',async (req,res)=>{
     var page=body.page || 1
     var row=body.row || 20
     var sql=''
-    if(storeId===0){
+    if(storeId===1){
         sql='select * from sys_admin_product '
     }else{
         sql=`select * from sys_admin_product where store_id=${storeId} `

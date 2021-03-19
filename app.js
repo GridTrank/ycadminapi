@@ -6,6 +6,7 @@ app.use(express.static('public'))
 let allowORigin=[
     "http://47.112.113.38",
     "http://localhost:8080",
+    "http://localhost:8081",
 ]
 app.all('*', function(req, res, next) {
     if (allowORigin.indexOf(req.headers.origin) >= 0){

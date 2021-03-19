@@ -17,7 +17,6 @@ router.use(bodyParser.urlencoded({extended:true}))
 let storeId
 router.post('/getList',async (req,res)=>{
     var body=req.body
-    console.log(body)
     storeId=Number(req.body.store_id) 
     var page=body.page || 1
     var row=body.row || 20
@@ -30,7 +29,7 @@ router.post('/getList',async (req,res)=>{
     var queryData=[]
     
     for (var key in body){
-        if(key!='store_id' && key!='page' && key!='row'){
+        if(key!='store_id' && key!='page' && key!='row' ){
             queryData.push(key)
         }
     }
@@ -60,7 +59,6 @@ router.post('/getList',async (req,res)=>{
     }
     
     sql+=` LIMIT ${(page-1)*row},${row} `
-    console.log(sql)
     var count=await getCount()
     pool.query(sql,[body],(err,response)=>{
         if(err)throw err
@@ -183,7 +181,6 @@ router.post('/editProduct',(req,res)=>{
 
 // 删除商品
 router.post('/delProduct',(req,res)=>{
-    console.log(req.body.pid)
     var sql=`delete from sys_admin_product where pid in (${req.body.pid})`
     console.log(sql)
     pool.query(sql,(err,response)=>{
@@ -235,8 +232,76 @@ router.post('/detail',(req,res)=>{
     })
 })
 
+// 首页商品图片
+router.post('/productIndex',upload.array('imgSrc',2),(req,res)=>{
+    var proObj={
+        img_src:'',
+        url:''
+    }
+    req.files.forEach((file,index)=>{
+        var extname = path.extname(req.files[0].originalname);  
+        proObj.img_src= new Date()*(index+1)+extname
+        proObj.url='http://47.112.113.38:3000/uploads/'+ new Date()*(index+1)+extname
+        fs.rename(file.path,file.destination+'/'+new Date()*(index+1)+extname,function(err){   
+            if(err){
+                res.send("重命名错误");
+            }else{
+                res.send(proObj);
+            }
+        })
+    })
+})
+// 添加首页商品
+router.post('/addIndex',(req,res)=>{
+    let data =req.body.data
+    var updatesql=`update sys_admin_homeconfig set ? where hid = ?`
+    var addsql=`insert into sys_admin_homeconfig set ?`
+    data.forEach(item=>{
+        if(!item.hid){
+            pool.query(addsql,[item],(err,result)=>{
+                if(err) throw err
+            })
+        }else{
+            pool.query(updatesql,[item,item.hid],(err,result)=>{
+                if(err) throw err
+                
+            })
+        }
+    })
+    res.send({
+        code:200
+    })
 
+})
+// 获取首页商品展示
+router.post('/index',(req,res)=>{
+    var sql='select * from sys_admin_homeconfig'
+    pool.query(sql,(err,result)=>{
+        if(err) throw err
+        res.send({
+            code:200,
+            result:result
+        })
+    })
+})
 
+// 删除首页配置
+router.post('/delIndex',(req,res)=>{
+    var sql=`delete from sys_admin_homeconfig where hid = ${req.body.pid}`
+    pool.query(sql,(err,result)=>{
+        if(err)throw err
+        if(result.affectedRows>0){
+            res.send({
+                code:200,
+                message:'删除成功',
+            })
+        }else{
+            res.send({
+                message:'删除失败',
+            }) 
+        }
+    })
+})
 
 
 module.exports=router

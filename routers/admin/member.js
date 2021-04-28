@@ -1,23 +1,26 @@
 const pool = require('../../pool.js')
 const express=require('express')
-const bodyParser=require('body-parser')
 const router = express.Router();
 const sd = require('silly-datetime');
+const bodyParser=require('body-parser')
+const md5 =require('md5')
 router.use(bodyParser.urlencoded({extended:true}))
-// 获取订单列表
+
+// 会员列表
 let storeId
-router.post('/getList',async (req,res)=>{
+router.post('/memberList',async (req,res)=>{
     var body=req.body
     storeId=Number(req.body.store_id) 
     var page=body.page || 1
     var row=body.row || 20
     var sql=''
     if(storeId===1){
-        sql='select * from sys_admin_order '
+        sql='select * from sys_admin_members '
     }else{
-        sql=`select * from sys_admin_order where store_id=${storeId} `
+        sql=`select * from sys_admin_members where store_id=${storeId} `
     }
     var queryData=[]
+    
     for (var key in body){
         if(key!='store_id' && key!='page' && key!='row' ){
             queryData.push(key)
@@ -25,9 +28,9 @@ router.post('/getList',async (req,res)=>{
     }
     if(queryData.length>0){
         if(storeId===1){
-            sql+='where '
+            sql+='where'
         }else{
-            sql+=' and'
+            sql+=' and '
         }
         queryData.forEach((el,ei,arr)=>{
             if(ei<arr.length-1){
@@ -46,11 +49,10 @@ router.post('/getList',async (req,res)=>{
                 }
             }
         })
-
     }
     var count=await getCount(sql)
-
-    sql+=`LIMIT ${(page-1)*row},${row} `
+    sql+=` LIMIT ${(page-1)*row},${row} `
+    console.log(sql)
     pool.query(sql,[body],(err,response)=>{
         if(err)throw err
         if(response && response.length>0){
@@ -63,13 +65,14 @@ router.post('/getList',async (req,res)=>{
             code:200,
             message:'succcess',
             result:{
-                orderList:response,
+                memberList:response,
                 count:count
             }
         }
         res.send(result)
     })
 })
+
 function getCount(sql){
     return new Promise((res,rej)=>{
         pool.query(sql,(err,result)=>{

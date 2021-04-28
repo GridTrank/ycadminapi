@@ -4,9 +4,9 @@ const app =express();
 app.use(express.static('public'))
 
 let allowORigin=[
-    "http://47.112.113.38",
     "http://localhost:8080",
     "http://localhost:8081",
+    "http://120.77.246.130",
 ]
 app.all('*', function(req, res, next) {
     if (allowORigin.indexOf(req.headers.origin) >= 0){
@@ -28,9 +28,9 @@ app.use('/role', require('./routers/admin/role'));
 app.use('/menu', require('./routers/admin/menu'));
 app.use('/product', require('./routers/admin/product'));
 app.use('/order', require('./routers/admin/order'));
-app.use('/user', require('./routers/admin/user'));
 app.use('/upload', require('./routers/admin/upload'));
 app.use('/store', require('./routers/admin/store'));
+app.use('/member', require('./routers/admin/member'));
 
 
 app.listen(3000,()=>{

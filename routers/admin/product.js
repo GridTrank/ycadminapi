@@ -9,7 +9,6 @@ const path = require("path");
 const upload = multer({ 
     dest:"public/uploads"
 })
-const details=[]
 
 router.use(bodyParser.urlencoded({extended:true}))
 
@@ -34,7 +33,7 @@ router.post('/getList',async (req,res)=>{
         }
     }
     if(queryData.length>0){
-        if(storeId===0){
+        if(storeId===1){
             sql+='where'
         }else{
             sql+=' and '
@@ -57,9 +56,9 @@ router.post('/getList',async (req,res)=>{
             }
         })
     }
-    
+    var count=await getCount(sql)
     sql+=` LIMIT ${(page-1)*row},${row} `
-    var count=await getCount()
+    console.log(sql)
     pool.query(sql,[body],(err,response)=>{
         if(err)throw err
         if(response && response.length>0){
@@ -73,25 +72,19 @@ router.post('/getList',async (req,res)=>{
             message:'succcess',
             result:{
                 productList:response,
-                count:count[0].count
+                count:count
             }
         }
         res.send(result)
     })
 })
-function getCount(){
-    var sql=''
-    if(storeId===0){
-        sql='select count(*) as count from sys_admin_product '
-    }else{
-        sql=`select count(*) as count from sys_admin_product where store_id=${storeId} `
-    }
+function getCount(sql){
     return new Promise((res,rej)=>{
         pool.query(sql,(err,result)=>{
             if(err){
                 throw err
             }else{
-               res(result)
+               res(result.length)
             }
         })
     })
@@ -108,7 +101,7 @@ router.post('/productBanner',upload.array('imgSrc',5),(req,res)=>{
     req.files.forEach((file,index)=>{
         var extname = path.extname(req.files[0].originalname);  
         proObj.img_src= new Date()*(index+1)+extname
-        proObj.url='http://47.112.113.38:3000/uploads/'+ new Date()*(index+1)+extname
+        proObj.url='http://120.77.246.130:3000/uploads/'+ new Date()*(index+1)+extname
         fs.rename(file.path,file.destination+'/'+new Date()*(index+1)+extname,function(err){   
             if(err){
                 res.send("重命名错误");
@@ -129,7 +122,7 @@ router.post('/detailImg',upload.array('imgSrc',6),(req,res)=>{
     req.files.forEach((file,index)=>{
         var extname = path.extname(req.files[0].originalname);  
         proObj.img_src= new Date()*(index+1)+extname
-        proObj.url='http://47.112.113.38:3000/uploads/'+ new Date()*(index+1)+extname
+        proObj.url='http://120.77.246.130:3000/uploads/'+ new Date()*(index+1)+extname
         fs.rename(file.path,file.destination+'/'+new Date()*(index+1)+extname,function(err){   
             if(err){
                 res.send("重命名错误");
@@ -212,13 +205,13 @@ router.post('/detail',(req,res)=>{
         if(data.banners){
             data.banners=data.banners.split(',')
             data.banners.forEach((el,i,arr)=>{
-                arr[i]='http://47.112.113.38:3000/uploads/'+ el
+                arr[i]='http://120.77.246.130:3000/uploads/'+ el
             })
         }
         if(data.detail_imgs){
             data.detail_imgs=data.detail_imgs.split(',')
             data.detail_imgs.forEach((el,i,arr)=>{
-                arr[i]='http://47.112.113.38:3000/uploads/'+ el
+                arr[i]='http://120.77.246.130:3000/uploads/'+ el
             })
         }
 
@@ -241,7 +234,7 @@ router.post('/productIndex',upload.array('imgSrc',2),(req,res)=>{
     req.files.forEach((file,index)=>{
         var extname = path.extname(req.files[0].originalname);  
         proObj.img_src= new Date()*(index+1)+extname
-        proObj.url='http://47.112.113.38:3000/uploads/'+ new Date()*(index+1)+extname
+        proObj.url='http://120.77.246.130:3000/uploads/'+ new Date()*(index+1)+extname
         fs.rename(file.path,file.destination+'/'+new Date()*(index+1)+extname,function(err){   
             if(err){
                 res.send("重命名错误");
